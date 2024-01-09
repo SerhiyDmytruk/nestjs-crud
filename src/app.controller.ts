@@ -1,19 +1,25 @@
 import { Controller, Get, Res, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
-import { AppService } from './app.service';
 import * as MOCKED_RESPONSE from './data/map-list.json';
 
 @Controller('map')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  // constructor(private readonly appService: AppService) {}
 
-  // @Get(':country')
-  // getCountry(@Param('country') country: string): string {
-  //   return this.appService.getCountry(country);
-  // }
+  @Get()
+  getCountry(@Res() res: Response): any {
+    interface Country {
+      'alpha-3': string;
+      name: string;
+    }
 
-  @Get('/payment-method')
-  getPaymentMoethod(@Res() res: Response): any {
-    res.status(HttpStatus.OK).json(MOCKED_RESPONSE);
+    const updatedMapArray: Country[] = MOCKED_RESPONSE.map((country) => {
+      return {
+        'alpha-3': country['alpha-3'],
+        name: country['name'],
+      };
+    });
+
+    res.status(HttpStatus.OK).json(updatedMapArray);
   }
 }
